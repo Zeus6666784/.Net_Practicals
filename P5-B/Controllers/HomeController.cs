@@ -1,25 +1,24 @@
 using Microsoft.AspNetCore.Mvc;
 using P5_B.Models;
-using System.Diagnostics;
-
-namespace P5_B.Controllers
+public class HomeController : Controller
 {
-    public class HomeController : Controller
+    private readonly AppDbContext _context;
+
+    public HomeController(AppDbContext context)
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        _context = context;
+    }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+    public IActionResult Index()
+    {
+        Product p = new Product();
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        p.Name = "Laptop";
+        p.Price = 50000;
+
+        _context.Products.Add(p);
+        _context.SaveChanges();
+
+        return Content("Product Inserted Successfully");
     }
 }
